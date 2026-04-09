@@ -10,9 +10,11 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include src/S_dev/S_uart/subdir.mk
 -include src/S_dev/S_i2c/subdir.mk
 -include src/subdir.mk
 -include ra_gen/subdir.mk
+-include ra/fsp/src/r_sci_uart/subdir.mk
 -include ra/fsp/src/r_ioport/subdir.mk
 -include ra/fsp/src/r_iic_master/subdir.mk
 -include ra/fsp/src/bsp/mcu/ra6m5/subdir.mk

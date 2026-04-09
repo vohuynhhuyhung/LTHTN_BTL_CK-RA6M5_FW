@@ -564,8 +564,8 @@ FSP Configuration
       Callback: i2c_callback
       Interrupt Priority Level: Priority 12
       
-    Instance "g_uart0 UART (r_sci_uart)"
-      General: Name: g_uart0
+    Instance "g_uart3 UART (r_sci_uart)"
+      General: Name: g_uart3
       General: Channel: 3
       General: Data Bits: 8bits
       General: Parity: None

@@ -1,5 +1,8 @@
 #include "hal_data.h"
 #include "S_dev/S_i2c/s_i2c.h"
+#include "S_dev/S_uart/s_uart.h"
+
+#include "stdio.h"
 
 #if (1 == BSP_MULTICORE_PROJECT) && BSP_TZ_SECURE_BUILD
 bsp_ipc_semaphore_handle_t g_core_start_semaphore =
@@ -15,20 +18,79 @@ bsp_ipc_semaphore_handle_t g_core_start_semaphore =
 void hal_entry(void)
 {
     /* TODO: add your own code here */
+//    uart_init();
+//    i2c_init();
+//
+//    uint8_t uart_str[] = "SANG\r\n";
+//    uint8_t i2c_rx;
+//    while(1)
+//    {
+//        i2c_write_reg(0x88, 0x55);
+//        R_BSP_SoftwareDelay(1000, BSP_DELAY_UNITS_MILLISECONDS);
+//        i2c_read_reg(0x88, &i2c_rx, 1);
+//        R_BSP_SoftwareDelay(1000, BSP_DELAY_UNITS_MILLISECONDS);
+//
+//        uart_send_buf(uart_str, sizeof(uart_str) - 1);
+//
+//
+//        R_IOPORT_PinWrite(&g_ioport_ctrl, BSP_IO_PORT_06_PIN_09, 1);
+//        R_BSP_SoftwareDelay(200, BSP_DELAY_UNITS_MILLISECONDS);
+//        R_IOPORT_PinWrite(&g_ioport_ctrl, BSP_IO_PORT_06_PIN_09, 0);
+//        R_BSP_SoftwareDelay(200, BSP_DELAY_UNITS_MILLISECONDS);
+//    }
+
+
+    uart_init();
     i2c_init();
-    uint8_t rx;
+
+    uint8_t i2c_rx;
+    char uart_buf[32];
+
     while(1)
     {
-        i2c_write_reg(0x88, 0x55);
-        R_BSP_SoftwareDelay(1000, BSP_DELAY_UNITS_MILLISECONDS);
-        i2c_read_reg(0x88, &rx, 1);
-        R_BSP_SoftwareDelay(1000, BSP_DELAY_UNITS_MILLISECONDS);
+        /* Write */
+        if (i2c_write_reg(0x88, 0x55) != FSP_SUCCESS)
+        {
+            uart_send_buf((uint8_t *)"I2C WRITE ERR\r\n", 15);
+        }
 
+        R_BSP_SoftwareDelay(100, BSP_DELAY_UNITS_MILLISECONDS);
+
+        /* Read */
+        if (i2c_read_reg(0x88, &i2c_rx, 1) == FSP_SUCCESS)
+        {
+            int len = sprintf(uart_buf, "RX = 0x%02X\r\n", i2c_rx);
+            uart_send_buf((uint8_t *)uart_buf, (uint8_t)len);
+        }
+        else
+        {
+            uart_send_buf((uint8_t *)"I2C READ ERR\r\n", 14);
+        }
+
+        R_BSP_SoftwareDelay(500, BSP_DELAY_UNITS_MILLISECONDS);
+
+        /* Blink LED */
         R_IOPORT_PinWrite(&g_ioport_ctrl, BSP_IO_PORT_06_PIN_09, 1);
         R_BSP_SoftwareDelay(200, BSP_DELAY_UNITS_MILLISECONDS);
         R_IOPORT_PinWrite(&g_ioport_ctrl, BSP_IO_PORT_06_PIN_09, 0);
         R_BSP_SoftwareDelay(200, BSP_DELAY_UNITS_MILLISECONDS);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /* Wake up 2nd core if this is first core and we are inside a multicore project. */
 #if (0 == _RA_CORE) && (1 == BSP_MULTICORE_PROJECT) && !BSP_TZ_NONSECURE_BUILD
 

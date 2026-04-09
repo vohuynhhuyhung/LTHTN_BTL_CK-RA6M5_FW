@@ -59,7 +59,9 @@ ra/fsp/src/bsp/mcu/all \
 ra/fsp/src/bsp/mcu/ra6m5 \
 ra/fsp/src/r_iic_master \
 ra/fsp/src/r_ioport \
+ra/fsp/src/r_sci_uart \
 ra_gen \
 src/S_dev/S_i2c \
+src/S_dev/S_uart \
 src \
 

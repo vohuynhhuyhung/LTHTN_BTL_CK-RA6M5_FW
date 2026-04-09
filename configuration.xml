@@ -293,7 +293,7 @@
       <property id="module.driver.i2c_master.ipl" value="board.icu.common.irq.priority12"/>
     </module>
     <module id="module.driver.uart_on_sci_uart.790110164">
-      <property id="module.driver.uart.name" value="g_uart0"/>
+      <property id="module.driver.uart.name" value="g_uart3"/>
       <property id="module.driver.uart.channel" value="3"/>
       <property id="module.driver.uart.data_bits" value="module.driver.uart.data_bits.data_bits_8"/>
       <property id="module.driver.uart.parity" value="module.driver.uart.parity.parity_off"/>
