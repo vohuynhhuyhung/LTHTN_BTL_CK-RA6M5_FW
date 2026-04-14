@@ -6,8 +6,6 @@
 #include "common_data.h"
 #include "r_sci_uart.h"
 #include "r_uart_api.h"
-#include "r_iic_master.h"
-#include "r_i2c_master_api.h"
 FSP_HEADER
 /** UART on SCI Instance. */
 extern const uart_instance_t g_uart3;
@@ -19,26 +17,6 @@ extern const sci_uart_extended_cfg_t g_uart3_cfg_extend;
 
 #ifndef NULL
 void NULL(uart_callback_args_t *p_args);
-#endif
-/* I2C Master on IIC Instance. */
-extern const i2c_master_instance_t g_i2c_master0;
-
-/** Access the I2C Master instance using these structures when calling API functions directly (::p_api is not used). */
-extern iic_master_instance_ctrl_t g_i2c_master0_ctrl;
-extern const i2c_master_cfg_t g_i2c_master0_cfg;
-
-#ifndef i2c_callback
-void i2c_callback(i2c_master_callback_args_t *p_args);
-#endif
-/* I2C Master on IIC Instance. */
-extern const i2c_master_instance_t g_i2c_master1;
-
-/** Access the I2C Master instance using these structures when calling API functions directly (::p_api is not used). */
-extern iic_master_instance_ctrl_t g_i2c_master1_ctrl;
-extern const i2c_master_cfg_t g_i2c_master1_cfg;
-
-#ifndef NULL
-void NULL(i2c_master_callback_args_t *p_args);
 #endif
 void hal_entry(void);
 void g_hal_init(void);

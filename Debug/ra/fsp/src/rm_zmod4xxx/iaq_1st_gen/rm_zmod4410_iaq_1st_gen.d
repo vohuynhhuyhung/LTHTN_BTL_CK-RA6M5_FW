@@ -1,7 +1,11 @@
-ra_gen/hal_data.o: ../ra_gen/hal_data.c ../ra_gen/hal_data.h \
+ra/fsp/src/rm_zmod4xxx/iaq_1st_gen/rm_zmod4410_iaq_1st_gen.o: \
+ ../ra/fsp/src/rm_zmod4xxx/iaq_1st_gen/rm_zmod4410_iaq_1st_gen.c \
+ D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/instances/rm_zmod4xxx.h \
+ D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/rm_zmod4xxx_api.h \
  D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/bsp_api.h \
  D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/fsp_common_api.h \
  D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/fsp_version.h \
+ D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/bsp_api.h \
  D:/Renesas_Workspace/i2c_prj/ra_cfg/fsp_cfg/bsp/bsp_cfg.h \
  D:/Renesas_Workspace/i2c_prj/ra_gen/bsp_clock_cfg.h \
  D:/Renesas_Workspace/i2c_prj/ra_cfg/fsp_cfg/bsp/bsp_mcu_family_cfg.h \
@@ -50,20 +54,18 @@ ra_gen/hal_data.o: ../ra_gen/hal_data.c ../ra_gen/hal_data.h \
  D:/Renesas_Workspace/i2c_prj/ra/fsp/src/bsp/mcu/all/bsp_compiler_support.h \
  D:/Renesas_Workspace/i2c_prj/ra/fsp/src/bsp/mcu/all/bsp_delay.h \
  D:/Renesas_Workspace/i2c_prj/ra/fsp/src/bsp/mcu/all/bsp_mcu_api.h \
- ../ra_gen/common_data.h \
- D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/instances/r_ioport.h \
- D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/r_ioport_api.h \
- D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/bsp_api.h \
- D:/Renesas_Workspace/i2c_prj/ra_cfg/fsp_cfg/r_ioport_cfg.h \
- D:/Renesas_Workspace/i2c_prj/ra_cfg/fsp_cfg/bsp/bsp_pin_cfg.h \
- D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/instances/r_sci_uart.h \
- D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/r_uart_api.h \
- D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/r_transfer_api.h \
- D:/Renesas_Workspace/i2c_prj/ra_cfg/fsp_cfg/r_sci_uart_cfg.h
-../ra_gen/hal_data.h:
+ D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/r_external_irq_api.h \
+ D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/rm_comms_api.h \
+ D:/Renesas_Workspace/i2c_prj/ra_cfg/fsp_cfg/rm_zmod4xxx_cfg.h \
+ ../ra/fsp/src/rm_zmod4xxx/iaq_1st_gen/../zmod4xxx_types.h \
+ ../ra/fsp/src/rm_zmod4xxx/iaq_1st_gen/iaq_1st_gen.h \
+ ../ra/fsp/src/rm_zmod4xxx/iaq_1st_gen/zmod4410_config_iaq1.h
+D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/instances/rm_zmod4xxx.h:
+D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/rm_zmod4xxx_api.h:
 D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/bsp_api.h:
 D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/fsp_common_api.h:
 D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/fsp_version.h:
+D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/bsp_api.h:
 D:/Renesas_Workspace/i2c_prj/ra_cfg/fsp_cfg/bsp/bsp_cfg.h:
 D:/Renesas_Workspace/i2c_prj/ra_gen/bsp_clock_cfg.h:
 D:/Renesas_Workspace/i2c_prj/ra_cfg/fsp_cfg/bsp/bsp_mcu_family_cfg.h:
@@ -112,13 +114,9 @@ D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/fsp_common_api.h:
 D:/Renesas_Workspace/i2c_prj/ra/fsp/src/bsp/mcu/all/bsp_compiler_support.h:
 D:/Renesas_Workspace/i2c_prj/ra/fsp/src/bsp/mcu/all/bsp_delay.h:
 D:/Renesas_Workspace/i2c_prj/ra/fsp/src/bsp/mcu/all/bsp_mcu_api.h:
-../ra_gen/common_data.h:
-D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/instances/r_ioport.h:
-D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/r_ioport_api.h:
-D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/bsp_api.h:
-D:/Renesas_Workspace/i2c_prj/ra_cfg/fsp_cfg/r_ioport_cfg.h:
-D:/Renesas_Workspace/i2c_prj/ra_cfg/fsp_cfg/bsp/bsp_pin_cfg.h:
-D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/instances/r_sci_uart.h:
-D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/r_uart_api.h:
-D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/r_transfer_api.h:
-D:/Renesas_Workspace/i2c_prj/ra_cfg/fsp_cfg/r_sci_uart_cfg.h:
+D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/r_external_irq_api.h:
+D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/rm_comms_api.h:
+D:/Renesas_Workspace/i2c_prj/ra_cfg/fsp_cfg/rm_zmod4xxx_cfg.h:
+../ra/fsp/src/rm_zmod4xxx/iaq_1st_gen/../zmod4xxx_types.h:
+../ra/fsp/src/rm_zmod4xxx/iaq_1st_gen/iaq_1st_gen.h:
+../ra/fsp/src/rm_zmod4xxx/iaq_1st_gen/zmod4410_config_iaq1.h:

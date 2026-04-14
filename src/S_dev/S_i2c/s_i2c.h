@@ -10,12 +10,20 @@
 
 #include "hal_data.h"
 
-void i2c_init(void);
+void i2c0_register_init(void);
 
-fsp_err_t i2c_write_reg(uint8_t reg, uint8_t data);
+void i2c0_write_reg(uint8_t slave_addr, uint8_t reg, uint8_t data);
 
-fsp_err_t i2c_read_reg(uint8_t reg, uint8_t *data, uint32_t len);
+uint8_t i2c0_read_reg(uint8_t slave_addr, uint8_t reg);
 
-void i2c_callback(i2c_master_callback_args_t *p_args);
 
-#endif /* S_DEV_S_I2C_S_I2C_H_ */
+
+void i2c1_register_init(void);
+
+void i2c1_write_reg(uint8_t slave_addr, uint8_t reg, uint8_t data);
+
+uint8_t i2c1_read_reg(uint8_t slave_addr, uint8_t reg);
+
+void i2c1_read_mult_reg(uint8_t slave_addr, uint8_t start_reg, uint8_t *p_data, uint8_t len);
+
+#endif

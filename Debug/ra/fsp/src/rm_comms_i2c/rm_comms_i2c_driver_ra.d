@@ -1,9 +1,11 @@
-ra/fsp/src/r_iic_master/r_iic_master.o: \
- ../ra/fsp/src/r_iic_master/r_iic_master.c \
- D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/instances/r_iic_master.h \
+ra/fsp/src/rm_comms_i2c/rm_comms_i2c_driver_ra.o: \
+ ../ra/fsp/src/rm_comms_i2c/rm_comms_i2c_driver_ra.c \
+ D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/instances/rm_comms_i2c.h \
+ D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/rm_comms_api.h \
  D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/bsp_api.h \
  D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/fsp_common_api.h \
  D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/fsp_version.h \
+ D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/bsp_api.h \
  D:/Renesas_Workspace/i2c_prj/ra_cfg/fsp_cfg/bsp/bsp_cfg.h \
  D:/Renesas_Workspace/i2c_prj/ra_gen/bsp_clock_cfg.h \
  D:/Renesas_Workspace/i2c_prj/ra_cfg/fsp_cfg/bsp/bsp_mcu_family_cfg.h \
@@ -52,14 +54,15 @@ ra/fsp/src/r_iic_master/r_iic_master.o: \
  D:/Renesas_Workspace/i2c_prj/ra/fsp/src/bsp/mcu/all/bsp_compiler_support.h \
  D:/Renesas_Workspace/i2c_prj/ra/fsp/src/bsp/mcu/all/bsp_delay.h \
  D:/Renesas_Workspace/i2c_prj/ra/fsp/src/bsp/mcu/all/bsp_mcu_api.h \
- D:/Renesas_Workspace/i2c_prj/ra_cfg/fsp_cfg/r_iic_master_cfg.h \
  D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/r_i2c_master_api.h \
- D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/bsp_api.h \
- D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/r_transfer_api.h
-D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/instances/r_iic_master.h:
+ D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/r_transfer_api.h \
+ D:/Renesas_Workspace/i2c_prj/ra_cfg/fsp_cfg/rm_comms_i2c_cfg.h
+D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/instances/rm_comms_i2c.h:
+D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/rm_comms_api.h:
 D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/bsp_api.h:
 D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/fsp_common_api.h:
 D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/fsp_version.h:
+D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/bsp_api.h:
 D:/Renesas_Workspace/i2c_prj/ra_cfg/fsp_cfg/bsp/bsp_cfg.h:
 D:/Renesas_Workspace/i2c_prj/ra_gen/bsp_clock_cfg.h:
 D:/Renesas_Workspace/i2c_prj/ra_cfg/fsp_cfg/bsp/bsp_mcu_family_cfg.h:
@@ -108,7 +111,6 @@ D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/fsp_common_api.h:
 D:/Renesas_Workspace/i2c_prj/ra/fsp/src/bsp/mcu/all/bsp_compiler_support.h:
 D:/Renesas_Workspace/i2c_prj/ra/fsp/src/bsp/mcu/all/bsp_delay.h:
 D:/Renesas_Workspace/i2c_prj/ra/fsp/src/bsp/mcu/all/bsp_mcu_api.h:
-D:/Renesas_Workspace/i2c_prj/ra_cfg/fsp_cfg/r_iic_master_cfg.h:
 D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/r_i2c_master_api.h:
-D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/bsp_api.h:
 D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/r_transfer_api.h:
+D:/Renesas_Workspace/i2c_prj/ra_cfg/fsp_cfg/rm_comms_i2c_cfg.h:

@@ -61,10 +61,7 @@ src/S_dev/S_i2c/s_i2c.o: ../src/S_dev/S_i2c/s_i2c.c \
  D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/instances/r_sci_uart.h \
  D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/r_uart_api.h \
  D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/r_transfer_api.h \
- D:/Renesas_Workspace/i2c_prj/ra_cfg/fsp_cfg/r_sci_uart_cfg.h \
- D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/instances/r_iic_master.h \
- D:/Renesas_Workspace/i2c_prj/ra_cfg/fsp_cfg/r_iic_master_cfg.h \
- D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/r_i2c_master_api.h
+ D:/Renesas_Workspace/i2c_prj/ra_cfg/fsp_cfg/r_sci_uart_cfg.h
 ../src/S_dev/S_i2c/s_i2c.h:
 D:/Renesas_Workspace/i2c_prj/ra_gen/hal_data.h:
 D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/bsp_api.h:
@@ -128,6 +125,3 @@ D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/instances/r_sci_uart.h:
 D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/r_uart_api.h:
 D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/r_transfer_api.h:
 D:/Renesas_Workspace/i2c_prj/ra_cfg/fsp_cfg/r_sci_uart_cfg.h:
-D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/instances/r_iic_master.h:
-D:/Renesas_Workspace/i2c_prj/ra_cfg/fsp_cfg/r_iic_master_cfg.h:
-D:/Renesas_Workspace/i2c_prj/ra/fsp/inc/api/r_i2c_master_api.h:
