@@ -18,40 +18,9 @@ bsp_ipc_semaphore_handle_t g_core_start_semaphore =
 void hal_entry(void)
 {
     /* TODO: add your own code here */
-//    uart_init();
-//
-//    char uart_str[100];
-//    i2c0_register_init();
-//    i2c1_register_init();
-//
-//    uint8_t zmod_id = i2c0_read_reg(0x32, 0x00);
-//
-//    if (zmod_id == 0x23)
-//    {
-//        int len = snprintf(uart_str, sizeof(uart_str),
-//                           "ZMOD4410 detected successfully (ID=0x%02X)\r\n", zmod_id);
-//        uart_send_buf((uint8_t *)uart_str, (uint32_t)len);
-//    }
-//    else
-//    {
-//        int len = snprintf(uart_str, sizeof(uart_str),
-//                           "Unexpected ID! Read = 0x%02X\r\n", zmod_id);
-//        uart_send_buf((uint8_t *)uart_str, (uint32_t)len);
-//    }
-//
-//    while (1)
-//    {
-//        i2c1_write_reg(0x68, 0x00, 0x12);
-//        R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MILLISECONDS);
-//        uint8_t rx = i2c1_read_reg(0x68, 0x00);
-//        int len = snprintf(uart_str, sizeof(uart_str), "I2C Read [0x68:0x00] = 0x%02X\r\n", rx);
-//        uart_send_buf((uint8_t *)uart_str, (uint32_t)len);
-//        R_BSP_SoftwareDelay(5, BSP_DELAY_UNITS_SECONDS);
-//    }
-
     uart_init();
-
     char uart_str[100];
+
     i2c0_register_init();
     i2c1_register_init();
 
@@ -62,6 +31,9 @@ void hal_entry(void)
         int len = snprintf(uart_str, sizeof(uart_str),
                            "ZMOD4410 detected successfully (ID=0x%02X)\r\n", zmod_id);
         uart_send_buf((uint8_t *)uart_str, (uint32_t)len);
+
+        // read ZMOD4410 in here
+
     }
     else
     {
@@ -74,8 +46,6 @@ void hal_entry(void)
 
     while (1)
     {
-//        i2c1_write_reg(0x68, 0x00, 0x12);
-//        R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MILLISECONDS);
         i2c1_read_mult_reg(0x68, 0x00, rx_buf, 3);
         int len = snprintf(uart_str, sizeof(uart_str), "I2C Read [0x68:0x00] = 0x%02X 0x%02X 0x%02X \r\n", rx_buf[0], rx_buf[1], rx_buf[2]);
         uart_send_buf((uint8_t *)uart_str, (uint32_t)len);

@@ -1778,30 +1778,30 @@ LOAD linker stubs
  .debug_rnglists
                 0x000006ae       0x13 ./ra/board/ra6m5_ck/board_init.o
 
-.debug_line     0x00000000     0x6872
+.debug_line     0x00000000     0x686a
  .debug_line    0x00000000      0x505 ./src/S_dev/S_uart/s_uart.o
  .debug_line    0x00000505      0xb5d ./src/S_dev/S_i2c/s_i2c.o
- .debug_line    0x00001062      0x337 ./src/hal_entry.o
- .debug_line    0x00001399      0x295 ./src/hal_warmstart.o
- .debug_line    0x0000162e      0x247 ./ra_gen/common_data.o
- .debug_line    0x00001875      0x296 ./ra_gen/hal_data.o
- .debug_line    0x00001b0b       0x5e ./ra_gen/main.o
- .debug_line    0x00001b69      0x1ce ./ra_gen/pin_data.o
- .debug_line    0x00001d37       0xfc ./ra_gen/vector_data.o
- .debug_line    0x00001e33     0x18ae ./ra/fsp/src/r_sci_uart/r_sci_uart.o
- .debug_line    0x000036e1      0xab0 ./ra/fsp/src/r_ioport/r_ioport.o
- .debug_line    0x00004191      0x13b ./ra/fsp/src/bsp/mcu/ra6m5/bsp_linker.o
- .debug_line    0x000042cc      0xa38 ./ra/fsp/src/bsp/mcu/all/bsp_clocks.o
- .debug_line    0x00004d04      0x268 ./ra/fsp/src/bsp/mcu/all/bsp_common.o
- .debug_line    0x00004f6c      0x2ab ./ra/fsp/src/bsp/mcu/all/bsp_delay.o
- .debug_line    0x00005217      0x2c6 ./ra/fsp/src/bsp/mcu/all/bsp_group_irq.o
- .debug_line    0x000054dd      0x15e ./ra/fsp/src/bsp/mcu/all/bsp_io.o
- .debug_line    0x0000563b      0x570 ./ra/fsp/src/bsp/mcu/all/bsp_irq.o
- .debug_line    0x00005bab      0x37e ./ra/fsp/src/bsp/mcu/all/bsp_register_protection.o
- .debug_line    0x00005f29       0xf2 ./ra/fsp/src/bsp/mcu/all/bsp_sbrk.o
- .debug_line    0x0000601b      0x1ca ./ra/fsp/src/bsp/cmsis/Device/RENESAS/Source/startup.o
- .debug_line    0x000061e5      0x633 ./ra/fsp/src/bsp/cmsis/Device/RENESAS/Source/system.o
- .debug_line    0x00006818       0x5a ./ra/board/ra6m5_ck/board_init.o
+ .debug_line    0x00001062      0x32f ./src/hal_entry.o
+ .debug_line    0x00001391      0x295 ./src/hal_warmstart.o
+ .debug_line    0x00001626      0x247 ./ra_gen/common_data.o
+ .debug_line    0x0000186d      0x296 ./ra_gen/hal_data.o
+ .debug_line    0x00001b03       0x5e ./ra_gen/main.o
+ .debug_line    0x00001b61      0x1ce ./ra_gen/pin_data.o
+ .debug_line    0x00001d2f       0xfc ./ra_gen/vector_data.o
+ .debug_line    0x00001e2b     0x18ae ./ra/fsp/src/r_sci_uart/r_sci_uart.o
+ .debug_line    0x000036d9      0xab0 ./ra/fsp/src/r_ioport/r_ioport.o
+ .debug_line    0x00004189      0x13b ./ra/fsp/src/bsp/mcu/ra6m5/bsp_linker.o
+ .debug_line    0x000042c4      0xa38 ./ra/fsp/src/bsp/mcu/all/bsp_clocks.o
+ .debug_line    0x00004cfc      0x268 ./ra/fsp/src/bsp/mcu/all/bsp_common.o
+ .debug_line    0x00004f64      0x2ab ./ra/fsp/src/bsp/mcu/all/bsp_delay.o
+ .debug_line    0x0000520f      0x2c6 ./ra/fsp/src/bsp/mcu/all/bsp_group_irq.o
+ .debug_line    0x000054d5      0x15e ./ra/fsp/src/bsp/mcu/all/bsp_io.o
+ .debug_line    0x00005633      0x570 ./ra/fsp/src/bsp/mcu/all/bsp_irq.o
+ .debug_line    0x00005ba3      0x37e ./ra/fsp/src/bsp/mcu/all/bsp_register_protection.o
+ .debug_line    0x00005f21       0xf2 ./ra/fsp/src/bsp/mcu/all/bsp_sbrk.o
+ .debug_line    0x00006013      0x1ca ./ra/fsp/src/bsp/cmsis/Device/RENESAS/Source/startup.o
+ .debug_line    0x000061dd      0x633 ./ra/fsp/src/bsp/cmsis/Device/RENESAS/Source/system.o
+ .debug_line    0x00006810       0x5a ./ra/board/ra6m5_ck/board_init.o
 
 .debug_str      0x00000000     0xbff5
  .debug_str     0x00000000     0xbff5 ./src/S_dev/S_uart/s_uart.o
