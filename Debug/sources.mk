@@ -57,10 +57,15 @@ ra/board/ra6m5_ck \
 ra/fsp/src/bsp/cmsis/Device/RENESAS/Source \
 ra/fsp/src/bsp/mcu/all \
 ra/fsp/src/bsp/mcu/ra6m5 \
+ra/fsp/src/r_iic_master \
 ra/fsp/src/r_ioport \
 ra/fsp/src/r_sci_uart \
+ra/fsp/src/rm_comms_i2c \
+ra/fsp/src/rm_zmod4xxx/iaq_2nd_gen \
+ra/fsp/src/rm_zmod4xxx \
 ra_gen \
-src/S_dev/S_i2c \
-src/S_dev/S_uart \
+src/dev/i2c \
+src/dev/uart \
+src/dev/zmod4410 \
 src \
 

@@ -1,4 +1,4 @@
-#include "s_i2c.h"
+#include "i2c.h"
 #include "hal_data.h"
 
 void i2c0_register_init(void) {
@@ -27,32 +27,56 @@ void i2c0_register_init(void) {
 }
 
 void i2c0_write_reg(uint8_t slave_addr, uint8_t reg, uint8_t data) {
-    // 1. Tạo điều kiện START
-    R_IIC0->ICCR2 |= 0x02;
+    // Đợi bus rảnh trước khi START
+    while(R_IIC0->ICCR2_b.BBSY);
 
-    // 2. Gửi địa chỉ Slave (Write: bit cuối = 0)
-    while(!(R_IIC0->ICSR2 & 0x80)); // Đợi ICDRT trống (TDRE)
+    R_IIC0->ICCR2_b.ST = 1;
+
+    while(!(R_IIC0->ICSR2_b.TDRE));
     R_IIC0->ICDRT = (uint8_t)(slave_addr << 1);
 
-    // 3. Gửi địa chỉ thanh ghi (Register)
-    while(!(R_IIC0->ICSR2 & 0x80));
+    while(!(R_IIC0->ICSR2_b.TDRE));
     R_IIC0->ICDRT = reg;
 
-    // 4. Gửi dữ liệu cần ghi
-    while(!(R_IIC0->ICSR2 & 0x80));
+    while(!(R_IIC0->ICSR2_b.TDRE));
     R_IIC0->ICDRT = data;
 
-    // 5. Đợi truyền xong và tạo điều kiện STOP
-    while(!(R_IIC0->ICSR2 & 0x40)); // Đợi TEND (Truyền xong hoàn toàn)
-    R_IIC0->ICCR2 |= 0x08;         // STOP
-    while(R_IIC0->ICCR2 & 0x08);   // Đợi lệnh STOP thực hiện xong
+    while(!(R_IIC0->ICSR2_b.TEND));
+    R_IIC0->ICCR2_b.SP = 1;
+    while(R_IIC0->ICCR2_b.BBSY);
+}
+
+void i2c0_write_mult_reg(uint8_t slave_addr, uint8_t start_reg, uint8_t *p_data, uint8_t len) {
+    // Đợi bus rảnh trước khi START
+    while(R_IIC0->ICCR2_b.BBSY);
+
+    R_IIC0->ICCR2_b.ST = 1;
+
+    // Gửi slave address (write)
+    while(!(R_IIC0->ICSR2_b.TDRE));
+    R_IIC0->ICDRT = (uint8_t)(slave_addr << 1);
+
+    // Gửi register address
+    while(!(R_IIC0->ICSR2_b.TDRE));
+    R_IIC0->ICDRT = start_reg;
+
+    // Gửi từng byte data trong 1 transaction
+    for (uint8_t i = 0; i < len; i++) {
+        while(!(R_IIC0->ICSR2_b.TDRE));
+        R_IIC0->ICDRT = p_data[i];
+    }
+
+    while(!(R_IIC0->ICSR2_b.TEND));
+    R_IIC0->ICCR2_b.SP = 1;
+    while(R_IIC0->ICCR2_b.BBSY);
 }
 
 uint8_t i2c0_read_reg(uint8_t slave_addr, uint8_t reg) {
     uint8_t receive_val;
 
     // Bước A: Write address (Write phase)
-    R_IIC0->ICCR2 |= 0x02;
+    while(R_IIC0->ICCR2_b.BBSY); // Đợi bus rảnh trước khi START
+    R_IIC0->ICCR2_b.ST = 1;
     while(!(R_IIC0->ICSR2 & 0x80));
     R_IIC0->ICDRT = (uint8_t)(slave_addr << 1);
     while(!(R_IIC0->ICSR2 & 0x80));
@@ -81,6 +105,12 @@ uint8_t i2c0_read_reg(uint8_t slave_addr, uint8_t reg) {
     while(!(R_IIC0->ICSR2_b.RDRF)); // Đợi dữ liệu thật về
     R_IIC0->ICCR2_b.SP = 1;          // STOP
     receive_val = R_IIC0->ICDRR;    // Đọc giá trị thật
+
+    // Reset WAIT/ACKBT về 0 để không ảnh hưởng transaction tiếp theo
+    R_IIC0->ICMR3_b.WAIT  = 0;
+    R_IIC0->ICMR3_b.ACKBT = 0;
+    R_IIC0->ICMR3_b.ACKWP = 0;
+    while(R_IIC0->ICCR2_b.BBSY);
 
     return receive_val;
 }
@@ -237,4 +267,57 @@ void i2c1_read_mult_reg(uint8_t slave_addr, uint8_t start_reg, uint8_t *p_data, 
     // Kết thúc: Tắt WAIT và đợi bus rảnh hoàn toàn
     R_IIC1->ICMR3_b.WAIT = 0;
     while(R_IIC1->ICCR2_b.BBSY); // Đợi bus hết bận
+}
+
+void i2c0_read_mult_reg(uint8_t slave_addr, uint8_t start_reg, uint8_t *p_data, uint8_t len) {
+    // Phase ghi: gửi slave address + register address
+    while(R_IIC0->ICCR2_b.BBSY); // Đợi bus rảnh trước khi START
+    R_IIC0->ICCR2_b.ST = 1;
+    while(!(R_IIC0->ICSR2_b.TDRE));
+    R_IIC0->ICDRT = (uint8_t)(slave_addr << 1);
+    while(!(R_IIC0->ICSR2_b.TDRE));
+    R_IIC0->ICDRT = start_reg;
+    while(!(R_IIC0->ICSR2_b.TEND));
+
+    // Restart để chuyển sang read phase
+    R_IIC0->ICCR2_b.RS = 1;
+    while(R_IIC0->ICCR2_b.RS);
+    while(!(R_IIC0->ICSR2_b.TDRE));
+    R_IIC0->ICDRT = (uint8_t)((slave_addr << 1) | 0x01);
+
+    while(!(R_IIC0->ICSR2_b.RDRF));
+
+    R_IIC0->ICMR3_b.WAIT = 1;
+
+    if (len == 1) {
+        R_IIC0->ICMR3_b.ACKWP = 1;
+        R_IIC0->ICMR3_b.ACKBT = 1;
+        (void)R_IIC0->ICDRR;
+        while(!(R_IIC0->ICSR2_b.RDRF));
+        R_IIC0->ICCR2_b.SP = 1;
+        p_data[0] = R_IIC0->ICDRR;
+    }
+    else {
+        (void)R_IIC0->ICDRR;
+
+        for (uint8_t i = 0; i < len; i++) {
+            while(!(R_IIC0->ICSR2_b.RDRF));
+
+            if (i == (len - 2)) {
+                R_IIC0->ICMR3_b.ACKWP = 1;
+                R_IIC0->ICMR3_b.ACKBT = 1;
+            }
+
+            if (i == (len - 1)) {
+                R_IIC0->ICCR2_b.SP = 1;
+            }
+
+            p_data[i] = R_IIC0->ICDRR;
+        }
+    }
+
+    R_IIC0->ICMR3_b.WAIT  = 0;
+    R_IIC0->ICMR3_b.ACKBT = 0;
+    R_IIC0->ICMR3_b.ACKWP = 0;
+    while(R_IIC0->ICCR2_b.BBSY);
 }

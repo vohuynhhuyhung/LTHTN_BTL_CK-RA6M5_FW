@@ -10,12 +10,17 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
--include src/S_dev/S_uart/subdir.mk
--include src/S_dev/S_i2c/subdir.mk
+-include src/dev/zmod4410/subdir.mk
+-include src/dev/uart/subdir.mk
+-include src/dev/i2c/subdir.mk
 -include src/subdir.mk
 -include ra_gen/subdir.mk
+-include ra/fsp/src/rm_zmod4xxx/iaq_2nd_gen/subdir.mk
+-include ra/fsp/src/rm_zmod4xxx/subdir.mk
+-include ra/fsp/src/rm_comms_i2c/subdir.mk
 -include ra/fsp/src/r_sci_uart/subdir.mk
 -include ra/fsp/src/r_ioport/subdir.mk
+-include ra/fsp/src/r_iic_master/subdir.mk
 -include ra/fsp/src/bsp/mcu/ra6m5/subdir.mk
 -include ra/fsp/src/bsp/mcu/all/subdir.mk
 -include ra/fsp/src/bsp/cmsis/Device/RENESAS/Source/subdir.mk
@@ -95,7 +100,7 @@ all: i2c_prj.elf secondary-outputs
 
 # Tool invocations
 i2c_prj.elf: $(OBJS) $(USER_OBJS) $(LINKER_SCRIPT)
-	$(file > i2c_prj.elf.in,-mcpu=cortex-m33 -mthumb -mfloat-abi=hard -mfpu=fpv5-sp-d16 -O2 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-strict-aliasing -Wunused -Wuninitialized -Wall -Wextra -Wmissing-declarations -Wconversion -Wpointer-arith -Wshadow -Wlogical-op -Waggregate-return -Wfloat-equal -g -T "fsp.ld" -Xlinker --gc-sections -L "D:\\Renesas_Workspace\\i2c_prj/script" -Wl,-Map,"i2c_prj.map" --specs=nano.specs -o "i2c_prj.elf" -Wl,--start-group $(OBJS) $(USER_OBJS) $(LIBS) -Wl,--end-group)
+	$(file > i2c_prj.elf.in,-mcpu=cortex-m33 -mthumb -mfloat-abi=hard -mfpu=fpv5-sp-d16 -O2 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-strict-aliasing -Wunused -Wuninitialized -Wall -Wextra -Wmissing-declarations -Wconversion -Wpointer-arith -Wshadow -Wlogical-op -Waggregate-return -Wfloat-equal -g -T "fsp.ld" -Xlinker --gc-sections -L "D:\\1_WorkSpace\\FW\\Renesas\\CK_RA6M5---I2C/script" -L "D:\\1_WorkSpace\\FW\\Renesas\\CK_RA6M5---I2C\\ra\\fsp\\lib\\rm_zmod4xxx\\cm33_gcc" -Wl,-Map,"i2c_prj.map" --specs=nano.specs -o "i2c_prj.elf" -Wl,--start-group $(OBJS) $(USER_OBJS) $(LIBS) -Wl,--end-group)
 	@echo Building target: $@ && arm-none-eabi-gcc @"i2c_prj.elf.in"
 i2c_prj.srec: i2c_prj.elf
 	arm-none-eabi-objcopy -O srec "i2c_prj.elf"  "i2c_prj.srec"

@@ -1,6 +1,7 @@
 #include "hal_data.h"
-#include "S_dev/S_i2c/s_i2c.h"
-#include "S_dev/S_uart/s_uart.h"
+#include "dev/i2c/i2c.h"
+#include "dev/uart/uart.h"
+#include "dev/zmod4410/zmod4410_adapter.h"
 
 #include "stdio.h"
 
@@ -32,7 +33,7 @@ void hal_entry(void)
                            "ZMOD4410 detected successfully (ID=0x%02X)\r\n", zmod_id);
         uart_send_buf((uint8_t *)uart_str, (uint32_t)len);
 
-        // read ZMOD4410 in here
+        zmod4410_read_iaq();
 
     }
     else

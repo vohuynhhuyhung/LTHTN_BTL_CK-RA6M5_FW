@@ -85,8 +85,8 @@
       <configSetting altId="etherc0.rmii.txd0.p700" configurationId="etherc0.rmii.txd0" peripheral="ETHERC_RMII0"/>
       <configSetting altId="etherc0.rmii.txd1.p406" configurationId="etherc0.rmii.txd1" peripheral="ETHERC_RMII0"/>
       <configSetting altId="etherc0.rmii.txd_en.p405" configurationId="etherc0.rmii.txd_en" peripheral="ETHERC_RMII0"/>
-      <configSetting altId="iic0.scl.p400" configurationId="iic0.scl" peripheral="IIC0"/>
-      <configSetting altId="iic0.sda.p401" configurationId="iic0.sda" peripheral="IIC0"/>
+      <configSetting altId="iic0.scl.p400" configurationId="iic0.scl" isUsedByDriver="true" peripheral="IIC0"/>
+      <configSetting altId="iic0.sda.p401" configurationId="iic0.sda" isUsedByDriver="true" peripheral="IIC0"/>
       <configSetting altId="iic1.scl.p512" configurationId="iic1.scl" peripheral="IIC1"/>
       <configSetting altId="iic1.sda.p511" configurationId="iic1.sda" peripheral="IIC1"/>
       <configSetting altId="p000.gpio_mode.gpio_mode_an" configurationId="p000.gpio_mode"/>

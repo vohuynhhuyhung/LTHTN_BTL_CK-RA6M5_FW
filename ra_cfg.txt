@@ -520,6 +520,23 @@ FSP Configuration
     RS-485 Support: Disable
     IrDA Support: Disabled
     
+  Module "ZMOD4XXX Gas Sensor (rm_zmod4xxx) [Deprecated]"
+    Parameter Checking: Default (BSP)
+    
+  Module "ZMOD4410 IAQ 2nd Generation (rm_zmod4xxx) [Deprecated]"
+    ZMOD4510 for oxidizing gas correction: Disabled
+    
+  Module "I2C Communication Device (rm_comms_i2c)"
+    Parameter Checking: Default (BSP)
+    
+  Module "I2C Shared Bus (rm_comms_i2c)"
+    Parameter Checking: Default (BSP)
+    
+  Module "I2C Master (r_iic_master)"
+    Parameter Checking: Default (BSP)
+    DTC on Transmission and Reception: Disabled
+    10-bit slave addressing: Disabled
+    
   HAL
     Instance "g_ioport I/O Port (r_ioport)"
       Name: g_ioport
@@ -558,3 +575,40 @@ FSP Configuration
       Interrupts: Transmit End Interrupt Priority: Priority 12
       Interrupts: Error Interrupt Priority: Priority 12
       
+    Instance "g_zmod4xxx_sensor0 ZMOD4XXX Gas Sensor (rm_zmod4xxx) [Deprecated]"
+      Name: g_zmod4xxx_sensor0
+      Comms I2C Callback: zmod4xxx_comms_i2c_callback
+      IRQ Callback: zmod4xxx_irq_callback
+      
+      Instance "ZMOD4410 IAQ 2nd Generation (rm_zmod4xxx) [Deprecated]"
+        
+        Instance "g_comms_i2c_device0 I2C Communication Device (rm_comms_i2c)"
+          Name: g_comms_i2c_device0
+          Semaphore Timeout (RTOS only): 0xFFFFFFFF
+          Slave Address: 0x32
+          Address Mode: 7-Bit
+          Callback: rm_zmod4xxx_comms_i2c_callback
+          
+          Instance "g_comms_i2c_bus0 I2C Shared Bus (rm_comms_i2c)"
+            Name: g_comms_i2c_bus0
+            Bus Timeout: 0xFFFFFFFF
+            Semaphore for Blocking (RTOS only): Use
+            Recursive Mutex for Bus (RTOS only): Use
+            Channel: 0
+            Rate: Standard
+            
+            Instance "g_i2c_master0 I2C Master (r_iic_master)"
+              Name: g_i2c_master0
+              Channel: 0
+              Rate: Standard
+              Custom Rate (bps): 0
+              Rise Time (ns): 120
+              Fall Time (ns): 120
+              Duty Cycle (%): 50
+              Slave Address: 0x00
+              Address Mode: 7-Bit
+              Timeout Mode: Short Mode
+              Timeout during SCL Low: Enabled
+              Callback: rm_comms_i2c_callback
+              Interrupt Priority Level: Priority 12
+              
