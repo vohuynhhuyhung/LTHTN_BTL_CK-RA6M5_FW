@@ -9,6 +9,7 @@
 #include "zmod4410_adapter.h"
 #include "../i2c/i2c.h"
 #include "../uart/uart.h"
+#include "../iaq_packet/iaq_packet.h"
 #include "zmod4xxx_types.h"
 #include "iaq_2nd_gen/iaq_2nd_gen.h"
 #include "hal_data.h"
@@ -35,7 +36,7 @@ void zmod4xxx_comms_i2c_callback(rm_zmod4xxx_callback_args_t *p_args)
 }
 
 /* ------------------------------------------------------------------ */
-/* Register addresses (từ rm_zmod4xxx.c)                               */
+/* Register addresses (từ rm_zmod4xxx.c)                              */
 /* ------------------------------------------------------------------ */
 #define REG_PID         (0x00U)
 #define REG_CONF        (0x20U)
@@ -232,12 +233,11 @@ void zmod4410_read_iaq(void)
                     (int)p_dev->init_conf->r.len);
     uart_send_buf((uint8_t *)uart_str, (uint32_t)slen);
 
-    /* Đọc R data sau init sequence — 4 bytes đầu chứa mox_lr và mox_er */
     uint8_t r_buf[4];
     i2c0_read_mult_reg(ZMOD4410_I2C_ADDR,
                        p_dev->init_conf->r.addr,
                        r_buf,
-                       4);
+                       p_dev->init_conf->r.len);
     p_dev->mox_lr = (uint16_t)((r_buf[0] << 8) | r_buf[1]);
     p_dev->mox_er = (uint16_t)((r_buf[2] << 8) | r_buf[3]);
 
@@ -278,7 +278,6 @@ void zmod4410_read_iaq(void)
                     "[ZMOD] Sensor ready. PID=0x%04X\r\n", (unsigned int)p_dev->pid);
     uart_send_buf((uint8_t *)uart_str, (uint32_t)slen);
 
-    /* ADC raw data buffer */
     uint8_t adc_buf[ZMOD4410_ADC_DATA_LEN];
 
     /* Input struct cho algorithm */
@@ -288,7 +287,6 @@ void zmod4410_read_iaq(void)
     algo_input.humidity_pct    = 50.0f;
     algo_input.temperature_degc = 20.0f;
 
-    /* --- Vòng đo liên tục --- */
     while (1)
     {
         /* Trigger đo */
@@ -304,7 +302,6 @@ void zmod4410_read_iaq(void)
         /* Đợi sequencer chạy xong (~3 giây cho IAQ 2nd Gen) */
         R_BSP_SoftwareDelay(ZMOD4410_IAQ2_SAMPLE_TIME, BSP_DELAY_UNITS_MILLISECONDS);
 
-        /* Poll status */
         timeout = 50;
         do {
             R_BSP_SoftwareDelay(100, BSP_DELAY_UNITS_MILLISECONDS);
@@ -363,13 +360,25 @@ void zmod4410_read_iaq(void)
             continue;
         }
 
-        /* In kết quả ra UART */
+        int iaq_i  = (int)(p_results->iaq  * 10.0f);
+        int tvoc_i = (int)(p_results->tvoc * 1000.0f);
+        int eco2_i = (int)(p_results->eco2 * 10.0f);
+        int etoh_i = (int)(p_results->etoh * 1000.0f);
         slen = snprintf(uart_str, sizeof(uart_str),
-                        "[ZMOD] IAQ=%.1f TVOC=%.3f eCO2=%.1f EtOH=%.3f\r\n",
-                        (double)p_results->iaq,
-                        (double)p_results->tvoc,
-                        (double)p_results->eco2,
-                        (double)p_results->etoh);
+                        "[ZMOD] IAQ=%d.%d TVOC=%d.%03d eCO2=%d.%d EtOH=%d.%03d\r\n",
+                        iaq_i / 10,  iaq_i % 10,
+                        tvoc_i / 1000, tvoc_i % 1000,
+                        eco2_i / 10,  eco2_i % 10,
+                        etoh_i / 1000, etoh_i % 1000);
         uart_send_buf((uint8_t *)uart_str, (uint32_t)slen);
+
+        /* Gửi binary frame đến ESP32 */
+        iaq_data_t pkt = {
+            .iaq  = p_results->iaq,
+            .tvoc = p_results->tvoc,
+            .eco2 = p_results->eco2,
+            .etoh = p_results->etoh,
+        };
+        iaq_packet_send(&pkt);
     }
 }

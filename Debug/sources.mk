@@ -65,6 +65,7 @@ ra/fsp/src/rm_zmod4xxx/iaq_2nd_gen \
 ra/fsp/src/rm_zmod4xxx \
 ra_gen \
 src/dev/i2c \
+src/dev/iaq_packet \
 src/dev/uart \
 src/dev/zmod4410 \
 src \

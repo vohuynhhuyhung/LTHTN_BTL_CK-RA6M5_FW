@@ -12,6 +12,7 @@ RM := rm -rf
 -include sources.mk
 -include src/dev/zmod4410/subdir.mk
 -include src/dev/uart/subdir.mk
+-include src/dev/iaq_packet/subdir.mk
 -include src/dev/i2c/subdir.mk
 -include src/subdir.mk
 -include ra_gen/subdir.mk
