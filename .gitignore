@@ -1,1 +1,13 @@
-*.claude
+# Build output
+Debug/
+
+# e2 Studio workspace/IDE files
+.settings/
+.launches/
+JLinkLog.log
+
+# J-Link session files (auto-generated, chứa path tuyệt đối của máy local)
+*.jlink
+
+# Claude memory
+.claude/

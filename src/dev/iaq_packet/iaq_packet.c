@@ -15,8 +15,12 @@
 #include "../uart/uart.h"
 #include <stdio.h>
 
-// verify packet terminal
-#define IAQ_PACKET_DEBUG 1
+/* Chọn một trong hai mode (comment cái không dùng):
+ *   IAQ_PACKET_DEBUG : in hex frame "AA 08 01 ... 55\r\n"  — để verify frame
+ *   IAQ_PACKET_ASCII : in CSV      "1.0,0.031,400.0,0.016\r\n" — để Python ghi CSV
+ *   Không define cả hai            : gửi binary frame thật đến ESP32 */
+//#define IAQ_PACKET_DEBUG
+#define IAQ_PACKET_ASCII
 
 static uint16_t crc16_ccitt(const uint8_t *data, uint8_t len)
 {
@@ -58,16 +62,25 @@ void iaq_packet_send(const iaq_data_t *data)
     frame[12] = (uint8_t)(crc & 0xFF);
     frame[13] = IAQ_FRAME_ETX;
 
-#ifdef IAQ_PACKET_DEBUG
-    char hex[IAQ_FRAME_TOTAL * 3 + 8];
+#if defined(IAQ_PACKET_DEBUG)
+    /* "AA 08 01 00 0A ... 55\r\n" */
+    char hex[IAQ_FRAME_TOTAL * 3 + 3];
     int pos = 0;
-    pos += snprintf(hex + pos, sizeof(hex) - (size_t)pos, "[PKT]");
     for (uint8_t i = 0; i < IAQ_FRAME_TOTAL; i++)
     {
-        pos += snprintf(hex + pos, sizeof(hex) - (size_t)pos, " %02X", frame[i]);
+        pos += snprintf(hex + pos, sizeof(hex) - (size_t)pos,
+                        i < (IAQ_FRAME_TOTAL - 1U) ? "%02X " : "%02X\r\n", frame[i]);
     }
-    pos += snprintf(hex + pos, sizeof(hex) - (size_t)pos, "\r\n");
     uart_send_buf((uint8_t *)hex, (uint32_t)pos);
+#elif defined(IAQ_PACKET_ASCII)
+    /* "1.0,0.031,400.0,0.016\r\n" — Python đọc và ghi CSV */
+    char asc[48];
+    int alen = snprintf(asc, sizeof(asc), "%d.%d,%d.%03d,%d.%d,%d.%03d\r\n",
+                        iaq_x10    / 10,  iaq_x10    % 10,
+                        tvoc_x1000 / 1000, tvoc_x1000 % 1000,
+                        eco2_x10   / 10,  eco2_x10   % 10,
+                        etoh_x1000 / 1000, etoh_x1000 % 1000);
+    uart_send_buf((uint8_t *)asc, (uint32_t)alen);
 #else
     uart_send_buf(frame, IAQ_FRAME_TOTAL);
 #endif
