@@ -17,17 +17,28 @@
 #define IAQ_FRAME_STX   (0xAAU)
 #define IAQ_FRAME_ETX   (0x55U)
 #define IAQ_FRAME_CMD   (0x01U)
-#define IAQ_FRAME_LEN   (8U)        /* payload length in bytes */
-#define IAQ_FRAME_TOTAL (14U)       /* total frame bytes: STX+LEN+CMD+8payload+CRC16+ETX */
+#define IAQ_FRAME_DATA  (0x02U)
+#define IAQ_PAYLOAD_FRAME_LEN   (5U)        /* payload length in bytes */
+#define IAQ_FRAME_TOTAL (11U)       /* total frame bytes: STX+LEN+CMD+8payload+CRC16+ETX */
+
+typedef enum {
+    SENSOR_ID_IAQ = 0,
+    SENSOR_ID_TVOC,
+    SENSOR_ID_ECO2,
+    SENSOR_ID_ETOH,
+    SENSOR_MAX
+} sensor_id_t;
+
 
 typedef struct {
-    float iaq;
-    float tvoc;
-    float eco2;
-    float etoh;
-} iaq_data_t;
+    uint8_t id;
+    float   data_current;
+    float   data_predict;
+} sensor_manager_t;
 
+
+extern sensor_manager_t g_sensors[SENSOR_MAX];
 /* Build and send one binary IAQ frame over UART */
-void iaq_packet_send(const iaq_data_t *data);
+void iaq_packet_send(const sensor_manager_t *sensor);
 
 #endif /* IAQ_PACKET_H_ */

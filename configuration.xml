@@ -133,8 +133,8 @@
       <property id="config.bsp.option_setting.bps_sel.3" value=""/>
     </config>
     <config id="config.bsp.ra">
-      <property id="config.bsp.common.main" value="0x400"/>
-      <property id="config.bsp.common.heap" value="0"/>
+      <property id="config.bsp.common.main" value="0x4000"/>
+      <property id="config.bsp.common.heap" value="0x8000"/>
       <property id="config.bsp.common.bootloader.xip_enable" value="config.bsp.common.bootloader.xip_enable.disabled"/>
       <property id="config.bsp.common.vcc" value="3300"/>
       <property id="config.bsp.common.checking" value="config.bsp.common.checking.disabled"/>
@@ -261,6 +261,14 @@
       <description>ZMOD4XXX Sensor Lib IAQ 2nd</description>
       <originalPack>Renesas.RA.6.4.0.pack</originalPack>
     </component>
+    <component apiversion="" class="Flatbuffers" condition="" group="Serialization" subgroup="Lib" variant="" vendor="Google" version="23.5.26+renesas.0.fsp.6.4.0">
+      <description>Flatbuffers</description>
+      <originalPack>Google.Flatbuffers.23.5.26+renesas.0.fsp.6.4.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="TFLM" condition="" group="Core" subgroup="Lib" variant="" vendor="Google" version="25.2.0+renesas.0.fsp.6.4.0">
+      <description>TFLM Core Lib</description>
+      <originalPack>Google.TFLM-Core-Lib.25.2.0+renesas.0.fsp.6.4.0.pack</originalPack>
+    </component>
   </raComponentSelection>
   <raElcConfiguration/>
   <raIcuConfiguration/>
@@ -339,6 +347,8 @@
       <property id="module.driver.i2c_master.p_callback" value="NULL"/>
       <property id="module.driver.i2c_master.ipl" value="board.icu.common.irq.priority12"/>
     </module>
+    <module id="module.google.tflm.core.lib.1147970251"/>
+    <module id="module.google.flatbuffers.lib.1348670224"/>
     <context id="_hal.0">
       <stack module="module.driver.ioport_on_ioport.0"/>
       <stack module="module.driver.uart_on_sci_uart.790110164"/>
@@ -350,6 +360,9 @@
             </stack>
           </stack>
         </stack>
+      </stack>
+      <stack module="module.google.tflm.core.lib.1147970251">
+        <stack module="module.google.flatbuffers.lib.1348670224" requires="module.google.tflm.core.lib.requires.flatbuffers"/>
       </stack>
     </context>
     <config id="config.driver.comms_i2c">

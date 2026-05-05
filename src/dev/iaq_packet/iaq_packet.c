@@ -20,7 +20,14 @@
  *   IAQ_PACKET_ASCII : in CSV      "1.0,0.031,400.0,0.016\r\n" — để Python ghi CSV
  *   Không define cả hai            : gửi binary frame thật đến ESP32 */
 //#define IAQ_PACKET_DEBUG
-#define IAQ_PACKET_ASCII
+//#define IAQ_PACKET_ASCII
+
+sensor_manager_t g_sensors[SENSOR_MAX] = {
+    {SENSOR_ID_IAQ,  0.0f, 0.0f},
+    {SENSOR_ID_TVOC, 0.0f, 0.0f},
+    {SENSOR_ID_ECO2, 0.0f, 0.0f},
+    {SENSOR_ID_ETOH, 0.0f, 0.0f}
+};
 
 static uint16_t crc16_ccitt(const uint8_t *data, uint8_t len)
 {
@@ -36,31 +43,33 @@ static uint16_t crc16_ccitt(const uint8_t *data, uint8_t len)
     return crc;
 }
 
-void iaq_packet_send(const iaq_data_t *data)
+void iaq_packet_send(const sensor_manager_t *sensor)
 {
-    uint8_t frame[IAQ_FRAME_TOTAL];
+	uint8_t frame[11];
+	uint16_t cur_data, pred_data;
 
-    uint16_t iaq_x10    = (uint16_t)(data->iaq  * 10.0f);
-    uint16_t tvoc_x1000 = (uint16_t)(data->tvoc * 1000.0f);
-    uint16_t eco2_x10   = (uint16_t)(data->eco2 * 10.0f);
-    uint16_t etoh_x1000 = (uint16_t)(data->etoh * 1000.0f);
+	    /* Scale giá trị float thành int16 tùy theo ID để giữ độ phân giải */
+	if (sensor->id == SENSOR_ID_IAQ || sensor->id == SENSOR_ID_ECO2) {
+	   cur_data  = (uint16_t)(sensor->data_current * 10.0f);
+	   pred_data = (uint16_t)(sensor->data_predict * 10.0f);
+	} else { /* TVOC và EtOH */
+	   cur_data  = (uint16_t)(sensor->data_current * 1000.0f);
+	   pred_data = (uint16_t)(sensor->data_predict * 1000.0f);
+	}
 
-    frame[0]  = IAQ_FRAME_STX;
-    frame[1]  = IAQ_FRAME_LEN;
-    frame[2]  = IAQ_FRAME_CMD;
-    frame[3]  = (uint8_t)(iaq_x10    >> 8);
-    frame[4]  = (uint8_t)(iaq_x10    & 0xFF);
-    frame[5]  = (uint8_t)(tvoc_x1000 >> 8);
-    frame[6]  = (uint8_t)(tvoc_x1000 & 0xFF);
-    frame[7]  = (uint8_t)(eco2_x10   >> 8);
-    frame[8]  = (uint8_t)(eco2_x10   & 0xFF);
-    frame[9]  = (uint8_t)(etoh_x1000 >> 8);
-    frame[10] = (uint8_t)(etoh_x1000 & 0xFF);
+    frame[0] = IAQ_FRAME_STX;
+    frame[1] = IAQ_PAYLOAD_FRAME_LEN;
+    frame[2] = IAQ_FRAME_DATA;
+    frame[3] = sensor -> id;
+    frame[4] = (uint8_t)(cur_data >> 8);
+    frame[5] = (uint8_t)(cur_data & 0xFF);
+    frame[6] = (uint8_t)(pred_data >> 8);
+    frame[7] = (uint8_t)(pred_data & 0xFF);
 
-    uint16_t crc = crc16_ccitt(&frame[1], 10);
-    frame[11] = (uint8_t)(crc >> 8);
-    frame[12] = (uint8_t)(crc & 0xFF);
-    frame[13] = IAQ_FRAME_ETX;
+    uint16_t crc = crc16_ccitt(&frame[1], 7);
+    frame[8] = (uint8_t)(crc >> 8);
+    frame[9] = (uint8_t)(crc & 0xFF);
+    frame[10] = IAQ_FRAME_ETX;
 
 #if defined(IAQ_PACKET_DEBUG)
     /* "AA 08 01 00 0A ... 55\r\n" */
@@ -82,6 +91,6 @@ void iaq_packet_send(const iaq_data_t *data)
                         etoh_x1000 / 1000, etoh_x1000 % 1000);
     uart_send_buf((uint8_t *)asc, (uint32_t)alen);
 #else
-    uart_send_buf(frame, IAQ_FRAME_TOTAL);
+    uart_send_buf((char*)frame, IAQ_FRAME_TOTAL);
 #endif
 }
