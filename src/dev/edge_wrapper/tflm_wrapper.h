@@ -10,9 +10,6 @@
 extern "C" {
 #endif
 
-// Khai báo các hàm giao tiếp giữa C và C++
-// Sử dụng các kiểu dữ liệu cơ bản của C (như mảng 1 chiều, con trỏ)
-
 void ai_model_init(void);
 void ai_model_predict(float* input_48, float* output_4);
 

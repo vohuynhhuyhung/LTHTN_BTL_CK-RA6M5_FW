@@ -1,21 +1,5 @@
-/*
- * app.c
- *
- * Application layer – tái cấu trúc zmod4410_read_iaq() thành các task
- * độc lập để gọi trong vòng lặp while(1) của main().
- *
- *  Luồng:
- *      my_prj_init()          ← gọi 1 lần
- *      while (1) {
- *          read_iaq_task()    ← đo sensor, cập nhật current
- *          ML_handle_task()   ← inference, cập nhật predict
- *          Uart_pkt_update()  ← đóng gói & gửi UART
- *      }
- */
-
 #include "app.h"
 
-/* ── Driver & middleware ────────────────────────────────── */
 #include "dev/zmod4410/zmod4410_adapter.h"
 #include "../i2c/i2c.h"
 #include "../uart/uart.h"
@@ -60,81 +44,19 @@ extern sensor_manager_t g_sensors[SENSOR_MAX];
  * ═══════════════════════════════════════════════════════════ */
 static AppState_t           s_state      = APP_STATE_UNINITIALIZED;
 
-/* Con trỏ tới các cấu trúc do FSP generate */
 static zmod4xxx_dev_t        *s_p_dev     = NULL;
 static iaq_2nd_gen_handle_t  *s_p_handle  = NULL;
 static iaq_2nd_gen_results_t *s_p_results = NULL;
 
-/* Buffer ADC dùng chung giữa các task */
 static uint8_t               s_adc_buf[ZMOD4410_ADC_DATA_LEN];
 
-/* FIFO window cho TinyML */
 static SensorWindow_t        s_win;
 
-/* Giá trị đo hiện tại – chia sẻ giữa read_iaq_task → ML_handle_task */
 static IaqReading_t          s_current_reading;
 
 /* ═══════════════════════════════════════════════════════════
  * Hàm nội bộ (static) – mirror của các helper trong adapter cũ
  * ═══════════════════════════════════════════════════════════ */
-
-///* ── Ghi burst I2C ──────────────────────────────────────── */
-//static void prv_write_burst(uint8_t reg, uint8_t *buf, uint8_t len)
-//{
-//    i2c0_write_mult_reg(ZMOD4410_I2C_ADDR, reg, buf, len);
-//}
-//
-///* ── Tính heater set-point ──────────────────────────────── */
-//static void prv_calc_hsp(zmod4xxx_conf *conf, uint8_t *config, uint8_t *hsp_out)
-//{
-//    uint8_t i = 0;
-//    while (i < conf->h.len)
-//    {
-//        int16_t hsp_temp = (int16_t)(((uint16_t)conf->h.data_buf[i] << 8)
-//                                     + conf->h.data_buf[i + 1]);
-//        float hspf = (-((float)config[2] * 256.0f + config[3]) *
-//                      ((config[4] + 640.0f) * (float)(config[5] + hsp_temp)
-//                       - 512000.0f)) / 12288000.0f;
-//        hsp_out[i]     = (uint8_t)((uint16_t)hspf >> 8);
-//        hsp_out[i + 1] = (uint8_t)((uint16_t)hspf & 0x00FFU);
-//        i = (uint8_t)(i + 2U);
-//    }
-//}
-//
-///* ── Đọc PID + config + prod_data từ sensor ────────────── */
-//static bool prv_read_sensor_info(void)
-//{
-//    uint8_t buf[2];
-//
-//    i2c0_read_mult_reg(ZMOD4410_I2C_ADDR, REG_PID, buf, 2);
-//    s_p_dev->pid = (uint16_t)((buf[0] << 8) | buf[1]);
-//
-//    if (s_p_dev->pid != ZMOD4410_PID)
-//        return false;
-//
-//    i2c0_read_mult_reg(ZMOD4410_I2C_ADDR, REG_CONF,      s_p_dev->config,    6);
-//    i2c0_read_mult_reg(ZMOD4410_I2C_ADDR, REG_PROD_DATA,  s_p_dev->prod_data, ZMOD4410_PROD_DATA_LEN);
-//
-//    return true;
-//}
-//
-///* ── Nạp measurement sequence lên sensor ───────────────── */
-//static bool prv_prepare_measurement(void)
-//{
-//    zmod4xxx_conf *conf = s_p_dev->meas_conf;
-//    uint8_t hsp[16]     = {0};
-//
-//    prv_calc_hsp(conf, s_p_dev->config, hsp);
-//
-//    prv_write_burst(conf->h.addr, hsp,                conf->h.len);
-//    prv_write_burst(conf->d.addr, conf->d.data_buf,   conf->d.len);
-//    prv_write_burst(conf->m.addr, conf->m.data_buf,   conf->m.len);
-//    prv_write_burst(conf->s.addr, conf->s.data_buf,   conf->s.len);
-//
-//    return true;
-//}
-//
-///* ── Poll REG_STATUS cho đến khi sequencer dừng ────────── */
 static bool prv_wait_sequencer(uint32_t timeout_loops, uint32_t poll_ms)
 {
     uint8_t status;
@@ -152,7 +74,7 @@ static bool prv_wait_sequencer(uint32_t timeout_loops, uint32_t poll_ms)
  * ════════════════════════════════════════════════════════════ */
 bool my_prj_init(void)
 {
-    s_state = APP_STATE_ERROR; /* giả sử lỗi, sẽ cập nhật nếu OK */
+    s_state = APP_STATE_ERROR;
 
     /* ── 1. Lấy con trỏ từ FSP extended config ──────────── */
     rm_zmod4xxx_lib_extended_cfg_t *p_ext =
@@ -298,7 +220,7 @@ bool read_iaq_task(IaqReading_t *p_out)
 void ML_handle_task(void)
 {
     if (!s_current_reading.valid)
-        return;                             /* chưa có dữ liệu hợp lệ */
+        return;
 
     /* ── 1. Clamp + push vào FIFO window ────────────────── */
     float raw[N_FEATURES] = {
@@ -322,7 +244,6 @@ void ML_handle_task(void)
     }
     else
     {
-        /* Window chưa đầy → fallback: predict = current */
         g_sensors[SENSOR_ID_IAQ].data_predict  = s_current_reading.iaq;
         g_sensors[SENSOR_ID_TVOC].data_predict = s_current_reading.tvoc;
         g_sensors[SENSOR_ID_ECO2].data_predict = s_current_reading.eco2;

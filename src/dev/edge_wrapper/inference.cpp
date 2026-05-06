@@ -6,10 +6,7 @@
 
 #include "inference.h"
 
-
-
-
-#include "modelhihi.h"   /* C array generate từ Colab Cell 9 */
+#include "modelhihi.h"
 
 #include "tensorflow/lite/micro/micro_interpreter.h"
 #include "tensorflow/lite/micro/micro_mutable_op_resolver.h"
@@ -19,19 +16,15 @@
 #include <cstring>
 #include <cstdio>
 
-/* ── Bộ nhớ tĩnh cho TFLite Micro ──────────────────────── */
 static uint8_t tensor_arena[TENSOR_ARENA_SIZE] __attribute__((aligned(16)));
 
-/* ── Đối tượng TFLite Micro (tĩnh, không dùng heap) ────── */
 static const tflite::Model              *s_model      = nullptr;
 static tflite::MicroInterpreter         *s_interpreter = nullptr;
 static TfLiteTensor                     *s_input       = nullptr;
 static TfLiteTensor                     *s_output      = nullptr;
 
-/* Op resolver — thêm đúng các op mà model dùng            */
 static tflite::MicroMutableOpResolver<12> s_resolver;
 
-/* ── Bảng scaler (axis=1, mỗi feature 1 cặp min/max) ───── */
 static const float kFeatMin[N_FEATURES] = {
     FEAT_MIN_0, FEAT_MIN_1, FEAT_MIN_2, FEAT_MIN_3
 };
